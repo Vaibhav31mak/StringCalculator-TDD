@@ -14,7 +14,17 @@ public class Calculator
         if (numbers.StartsWith("//"))
         {
             int newlineIndex = numbers.IndexOf('\n');
-            delimiter = numbers.Substring(2, newlineIndex - 2);
+
+            if (numbers[2] == '[')
+            {
+                int endBracketIndex = numbers.IndexOf(']');
+                delimiter = numbers.Substring(3, endBracketIndex - 3);
+            }
+            else
+            {
+                delimiter = numbers.Substring(2, newlineIndex - 2);
+            }
+
             numberPart = numbers.Substring(newlineIndex + 1);
         }
 
