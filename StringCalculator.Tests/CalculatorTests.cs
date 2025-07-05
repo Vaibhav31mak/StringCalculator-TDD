@@ -61,4 +61,12 @@ public class CalculatorTests
         Assert.Equal("negative numbers not allowed -1,-4", ex.Message);
     }
 
+    [Fact]
+    public void Add_NumbersGreaterThan1000_AreIgnored()
+    {
+        var calc = new Calculator();
+        var result = calc.Add("2,1001");
+        Assert.Equal(2, result);
+    }
+
 }
