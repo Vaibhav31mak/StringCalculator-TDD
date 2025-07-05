@@ -8,40 +8,31 @@ public class Calculator
             return 0;
 
         string delimiter = ",";
-        int startIndex = 0;
+        string numberPart = numbers;
 
+        // Custom delimiter format
         if (numbers.StartsWith("//"))
         {
             int newlineIndex = numbers.IndexOf('\n');
             delimiter = numbers.Substring(2, newlineIndex - 2);
-            startIndex = newlineIndex + 1;
+            numberPart = numbers.Substring(newlineIndex + 1);
         }
 
-        string cleanedNumbers = numbers.Substring(startIndex);
-        cleanedNumbers = cleanedNumbers.Replace("\n", delimiter);
-        List<string> tokens = new List<string>();
-        int lastPos = 0;
+        // Normalize input by replacing newlines
+        numberPart = numberPart.Replace("\n", delimiter);
 
-        for (int i = 0; i <= cleanedNumbers.Length; i++)
-        {
-            if (i == cleanedNumbers.Length || cleanedNumbers[i].ToString() == delimiter)
-            {
-                string part = cleanedNumbers.Substring(lastPos, i - lastPos);
-                if (!string.IsNullOrWhiteSpace(part))
-                {
-                    tokens.Add(part.Trim());
-                }
-                lastPos = i + 1;
-            }
-        }
-
+        string[] tokens = numberPart.Split(delimiter);
         int sum = 0;
 
         foreach (var token in tokens)
         {
-            sum += int.Parse(token);
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                sum += int.Parse(token.Trim());
+            }
         }
 
         return sum;
     }
+
 }
