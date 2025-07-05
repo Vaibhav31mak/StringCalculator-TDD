@@ -7,26 +7,27 @@ public class Calculator
         if (string.IsNullOrWhiteSpace(numbers))
             return 0;
 
-        List<string> delimiters = new List<string>() { ",", "\n" };
+        var delimiters = new List<string> { ",", "\n" };
         string numberPart = numbers;
 
-        // Handle custom delimiters
+        // Check for custom delimiter(s)
         if (numbers.StartsWith("//"))
         {
             int newlineIndex = numbers.IndexOf('\n');
             string delimiterSection = numbers.Substring(2, newlineIndex - 2);
+            delimiters.Clear(); // Use only custom delimiters
 
+            // Handle multiple/multi-char delimiters like //[***][%%]
             if (delimiterSection.StartsWith("["))
             {
-                // Multiple or multi-character delimiters
                 int i = 0;
                 while (i < delimiterSection.Length)
                 {
                     if (delimiterSection[i] == '[')
                     {
                         int j = delimiterSection.IndexOf(']', i);
-                        string d = delimiterSection.Substring(i + 1, j - i - 1);
-                        delimiters.Add(d);
+                        string delimiter = delimiterSection.Substring(i + 1, j - i - 1);
+                        delimiters.Add(delimiter);
                         i = j + 1;
                     }
                     else
@@ -37,34 +38,32 @@ public class Calculator
             }
             else
             {
-                // Single character delimiter
+                // Single-character custom delimiter
                 delimiters.Add(delimiterSection);
             }
 
             numberPart = numbers.Substring(newlineIndex + 1);
         }
 
-        // Normalize all delimiters to comma
-        foreach (var d in delimiters)
+        // Replace all delimiters with comma for uniform processing
+        foreach (var delimiter in delimiters)
         {
-            numberPart = numberPart.Replace(d, ",");
+            numberPart = numberPart.Replace(delimiter, ",");
         }
 
-        string[] tokens = numberPart.Split(',');
-        List<int> negatives = new List<int>();
+        // Parse and sum numbers
+        string[] tokens = numberPart.Split(',', StringSplitOptions.RemoveEmptyEntries);
+        var negatives = new List<int>();
         int sum = 0;
 
         foreach (var token in tokens)
         {
-            if (!string.IsNullOrWhiteSpace(token))
-            {
-                int number = int.Parse(token.Trim());
+            int number = int.Parse(token.Trim());
 
-                if (number < 0)
-                    negatives.Add(number);
-                else if (number <= 1000)
-                    sum += number;
-            }
+            if (number < 0)
+                negatives.Add(number);
+            else if (number <= 1000)
+                sum += number;
         }
 
         if (negatives.Count > 0)
