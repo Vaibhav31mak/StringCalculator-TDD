@@ -32,8 +32,8 @@ public class Calculator
 
                 if (number < 0)
                     negatives.Add(number);
-
-                sum += number;
+                else if (number <= 1000)
+                    sum += number;
             }
         }
 
