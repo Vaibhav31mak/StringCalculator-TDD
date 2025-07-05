@@ -10,24 +10,28 @@ public class Calculator
         string delimiter = ",";
         string numberPart = numbers;
 
-        // Handle custom delimiter
+        // Check for custom delimiter
         if (numbers.StartsWith("//"))
         {
             int newlineIndex = numbers.IndexOf('\n');
 
             if (numbers[2] == '[')
             {
-                int endBracketIndex = numbers.IndexOf(']');
-                delimiter = numbers.Substring(3, endBracketIndex - 3);
+                // Delimiter in format //[***]
+                int start = numbers.IndexOf('[') + 1;
+                int end = numbers.IndexOf(']');
+                delimiter = numbers.Substring(start, end - start);
             }
             else
             {
+                // Single character delimiter
                 delimiter = numbers.Substring(2, newlineIndex - 2);
             }
 
             numberPart = numbers.Substring(newlineIndex + 1);
         }
 
+        // Replace newlines with delimiter and split
         numberPart = numberPart.Replace("\n", delimiter);
         string[] tokens = numberPart.Split(delimiter);
 
@@ -44,7 +48,6 @@ public class Calculator
                     negatives.Add(number);
                 else if (number <= 1000)
                     sum += number;
-                // Numbers > 1000 are ignored
             }
         }
 
@@ -55,5 +58,6 @@ public class Calculator
 
         return sum;
     }
+
 
 }
