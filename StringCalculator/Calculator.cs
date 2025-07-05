@@ -7,34 +7,50 @@ public class Calculator
         if (string.IsNullOrWhiteSpace(numbers))
             return 0;
 
-        string delimiter = ",";
+        List<string> delimiters = new List<string>() { ",", "\n" };
         string numberPart = numbers;
 
-        // Check for custom delimiter
+        // Handle custom delimiters
         if (numbers.StartsWith("//"))
         {
             int newlineIndex = numbers.IndexOf('\n');
+            string delimiterSection = numbers.Substring(2, newlineIndex - 2);
 
-            if (numbers[2] == '[')
+            if (delimiterSection.StartsWith("["))
             {
-                // Delimiter in format //[***]
-                int start = numbers.IndexOf('[') + 1;
-                int end = numbers.IndexOf(']');
-                delimiter = numbers.Substring(start, end - start);
+                // Multiple or multi-character delimiters
+                int i = 0;
+                while (i < delimiterSection.Length)
+                {
+                    if (delimiterSection[i] == '[')
+                    {
+                        int j = delimiterSection.IndexOf(']', i);
+                        string d = delimiterSection.Substring(i + 1, j - i - 1);
+                        delimiters.Add(d);
+                        i = j + 1;
+                    }
+                    else
+                    {
+                        i++;
+                    }
+                }
             }
             else
             {
                 // Single character delimiter
-                delimiter = numbers.Substring(2, newlineIndex - 2);
+                delimiters.Add(delimiterSection);
             }
 
             numberPart = numbers.Substring(newlineIndex + 1);
         }
 
-        // Replace newlines with delimiter and split
-        numberPart = numberPart.Replace("\n", delimiter);
-        string[] tokens = numberPart.Split(delimiter);
+        // Normalize all delimiters to comma
+        foreach (var d in delimiters)
+        {
+            numberPart = numberPart.Replace(d, ",");
+        }
 
+        string[] tokens = numberPart.Split(',');
         List<int> negatives = new List<int>();
         int sum = 0;
 
@@ -52,12 +68,8 @@ public class Calculator
         }
 
         if (negatives.Count > 0)
-        {
             throw new Exception("negative numbers not allowed " + string.Join(",", negatives));
-        }
 
         return sum;
     }
-
-
 }
