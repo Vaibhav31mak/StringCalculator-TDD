@@ -53,6 +53,12 @@ public class CalculatorTests
         var result = calc.Add("//;\n1;2");
         Assert.Equal(3, result);
     }
-
+    [Fact]
+    public void Add_MultipleNegativeNumbers_ThrowsExceptionWithAllNegatives()
+    {
+        var calc = new Calculator();
+        var ex = Assert.Throws<Exception>(() => calc.Add("-1,2,-4"));
+        Assert.Equal("negative numbers not allowed -1,-4", ex.Message);
+    }
 
 }
