@@ -46,6 +46,13 @@ public class CalculatorTests
         var result = calc.Add("1\n2,3");
         Assert.Equal(6, result);
     }
+    [Fact]
+    public void Add_CustomDelimiter_ReturnsSum()
+    {
+        var calc = new Calculator();
+        var result = calc.Add("//;\n1;2");
+        Assert.Equal(3, result);
+    }
 
 
 }
