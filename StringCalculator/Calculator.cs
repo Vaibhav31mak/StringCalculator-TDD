@@ -8,16 +8,16 @@ public class Calculator
             return 0;
 
         string[] delimiters = { ",", "\n" };
-        string[] parts = numbers.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        string[] tokens = numbers.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
         int sum = 0;
-        foreach (string part in parts)
+        foreach (string token in tokens)
         {
-            int number = int.Parse(part.Trim());
-            sum += number;
+            sum += int.Parse(token.Trim());
         }
 
         return sum;
     }
+
 
 }
