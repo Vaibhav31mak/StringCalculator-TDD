@@ -10,7 +10,7 @@ public class Calculator
         string delimiter = ",";
         string numberPart = numbers;
 
-        // Check for custom delimiter
+        // Handle custom delimiter
         if (numbers.StartsWith("//"))
         {
             int newlineIndex = numbers.IndexOf('\n');
@@ -34,6 +34,7 @@ public class Calculator
                     negatives.Add(number);
                 else if (number <= 1000)
                     sum += number;
+                // Numbers > 1000 are ignored
             }
         }
 
@@ -44,4 +45,5 @@ public class Calculator
 
         return sum;
     }
+
 }
