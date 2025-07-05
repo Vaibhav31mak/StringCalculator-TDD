@@ -32,6 +32,13 @@ public class CalculatorTests
 
         Assert.Equal(6, result);
     }
+    [Fact]
+    public void Add_MultipleNumbers_ReturnsTheirSum()
+    {
+        var calc = new Calculator();
+        var result = calc.Add("1,2,3,4");
+        Assert.Equal(10, result);
+    }
 
 
 }
