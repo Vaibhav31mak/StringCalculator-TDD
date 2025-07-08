@@ -90,6 +90,12 @@ public class CalculatorTests
         var result = calc.Add("//[***][%%]\n1***2%%3");
         Assert.Equal(6, result);
     }
-
+    [Fact]
+    public void Add_CustomDelimiterStarForMultiplication_ReturnsSum()
+    {
+        var calc = new Calculator();
+        var result = calc.Add("//*\n1*2*3*4");
+        Assert.Equal(24, result);
+    }
 
 }

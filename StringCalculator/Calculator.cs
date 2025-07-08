@@ -9,14 +9,17 @@ public class Calculator
 
         var delimiters = new List<string> { ",", "\n" };
         string numberPart = numbers;
-
+        int ConsistsStar = 0;
         // Check for custom delimiter(s)
         if (numbers.StartsWith("//"))
         {
             int newlineIndex = numbers.IndexOf('\n');
             string delimiterSection = numbers.Substring(2, newlineIndex - 2);
             delimiters.Clear(); // Use only custom delimiters
-
+            if (numbers[2] == '*' && numbers[3]=='\n')
+            {
+                ConsistsStar = 1;
+            }
             // Handle multiple/multi-char delimiters like //[***][%%]
             if (delimiterSection.StartsWith("["))
             {
@@ -50,20 +53,34 @@ public class Calculator
         {
             numberPart = numberPart.Replace(delimiter, ",");
         }
-
+        
         // Parse and sum numbers
         string[] tokens = numberPart.Split(',', StringSplitOptions.RemoveEmptyEntries);
         var negatives = new List<int>();
         int sum = 0;
-
-        foreach (var token in tokens)
+        if (ConsistsStar == 1)
         {
-            int number = int.Parse(token.Trim());
+            sum = 1;
+            foreach (var token in tokens)
+            {
+                int number = int.Parse(token.Trim());
 
-            if (number < 0)
-                negatives.Add(number);
-            else if (number <= 1000)
-                sum += number;
+                if (number < 0)
+                    negatives.Add(number);
+                else if (number <= 1000)
+                    sum *= number;
+            }
+        }
+        else
+        {
+            foreach (var token in tokens)
+            {
+                int number = int.Parse(token.Trim());
+                if (number < 0)
+                    negatives.Add(number);
+                else if (number <= 1000)
+                    sum += number;
+            }
         }
 
         if (negatives.Count > 0)
